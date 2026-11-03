@@ -1,0 +1,4 @@
+id,jd,resume,human_label
+1,示例JD文本1,示例简历文本1,high
+2,示例JD文本2,示例简历文本2,mid
+3,"含逗号的JD需要加引号","含逗号的简历需要加引号",low

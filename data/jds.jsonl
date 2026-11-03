@@ -1,0 +1,5 @@
+{"id":"jd01","title":"大模型应用开发实习生","text":"负责大模型应用的产品化落地，参与RAG知识库建设与Prompt工程优化；熟悉Python，了解LangChain或LlamaIndex；有向量数据库（FAISS/Chroma）使用经验优先；负责接口开发与效果评测。"}
+{"id":"jd02","title":"AI应用算法实习生","text":"参与多模态内容理解与风险识别项目，负责文本分类、信息抽取与大模型微调；要求熟悉PyTorch、Transformer，有NLP项目经验；具备良好的工程能力，熟悉Git与Linux。"}
+{"id":"jd03","title":"数据分析实习生","text":"负责业务数据的整理、清洗与可视化，输出分析报告；熟练使用SQL与Excel，掌握Python/pandas；熟悉AB测试与指标体系建设者优先。"}
+{"id":"jd04","title":"测试开发实习生","text":"负责接口自动化测试与质量平台建设；使用Python编写测试脚本，熟悉HTTP协议与pytest；了解CI/CD流程；有大模型应用测试经验优先。"}
+{"id":"jd05","title":"AI产品研发实习生","text":"参与AI产品的需求分析、方案设计与原型开发；能够使用大模型API快速搭建Demo，熟悉Prompt工程与RAG；具备产品思维与跨团队沟通能力。"}
