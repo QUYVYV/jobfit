@@ -4,7 +4,7 @@ import os
 import plotly.graph_objects as go
 import streamlit as st
 
-from core.scorer import analyze
+from core.scorer import W_COVERAGE, W_SIMILARITY, analyze
 from core.skills import extract, load_skills
 
 st.set_page_config(page_title="JobFit · AI 岗位匹配助手", page_icon="🎯", layout="wide")
@@ -47,7 +47,11 @@ if st.button("开始分析", type="primary"):
     with left:
         score = int(result.get("score", 0))
         st.metric("匹配度", f"{score} / 100")
-        st.caption("规则模式：技能覆盖率 65% + 文本相似度 35%" if result.get("mode") == "rule" else "大模型模式")
+        st.caption(
+            f"规则模式：技能覆盖率 {W_COVERAGE:.0%} + 文本相似度 {W_SIMILARITY:.0%}"
+            if result.get("mode") == "rule"
+            else "大模型模式"
+        )
         comp = result.get("components")
         if comp:
             st.caption(

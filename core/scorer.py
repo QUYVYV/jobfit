@@ -8,6 +8,9 @@ from .skills import coverage, extract, load_skills
 
 SKILLS = load_skills()
 
+W_COVERAGE = 0.65
+W_SIMILARITY = 0.35
+
 SYSTEM = (
     "你是招聘匹配评估助手。只输出 JSON，不要输出解释性文字。"
     "score 为 0-100 的整数；matched_skills / missing_skills 为技能名数组；"
@@ -32,7 +35,7 @@ def analyze(jd: str, resume: str, use_llm: bool = True) -> dict:
     rs_sk = set(extract(resume, SKILLS).keys())
     cov = coverage(jd_sk, rs_sk)
     sim = similarity(jd, resume)
-    rule_score = round(100 * (0.65 * cov["coverage"] + 0.35 * sim))
+    rule_score = round(100 * (W_COVERAGE * cov["coverage"] + W_SIMILARITY * sim))
     refs = similar(jd, load_corpus(), k=3)
 
     rule = {
@@ -42,8 +45,8 @@ def analyze(jd: str, resume: str, use_llm: bool = True) -> dict:
         "components": {
             "coverage": round(cov["coverage"], 4),
             "similarity": round(sim, 4),
-            "w_coverage": 0.65,
-            "w_similarity": 0.35,
+            "w_coverage": W_COVERAGE,
+            "w_similarity": W_SIMILARITY,
         },
         "reasons": [
             f"岗位要求的 {len(jd_sk)} 项技能中命中 {len(cov['matched'])} 项（覆盖率 {cov['coverage']:.0%}）",
