@@ -47,17 +47,20 @@ if st.button("开始分析", type="primary"):
     with left:
         score = int(result.get("score", 0))
         st.metric("匹配度", f"{score} / 100")
+        mode = result.get("mode")
         st.caption(
             f"规则模式：技能覆盖率 {W_COVERAGE:.0%} + 文本相似度 {W_SIMILARITY:.0%}"
-            if result.get("mode") == "rule"
-            else "大模型模式"
+            if mode == "rule"
+            else f"大模型模式（{os.getenv('LLM_MODEL', 'deepseek-chat')}）"
         )
         comp = result.get("components")
         if comp:
-            st.caption(
+            reference_score = int(result.get("rule_score", score))
+            formula = (
                 f"技能覆盖率 {comp['coverage']:.0%} × {comp['w_coverage']:.0%} + "
-                f"文本相似度 {comp['similarity']:.2f} × {comp['w_similarity']:.0%} = {score} 分"
+                f"文本相似度 {comp['similarity']:.2f} × {comp['w_similarity']:.0%} = {reference_score} 分"
             )
+            st.caption(("规则参考分：" if mode == "llm" else "") + formula)
     with right:
         matched = result.get("matched_skills", [])
         missing = result.get("missing_skills", [])

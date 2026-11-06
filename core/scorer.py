@@ -12,9 +12,12 @@ W_COVERAGE = 0.65
 W_SIMILARITY = 0.35
 
 SYSTEM = (
-    "你是招聘匹配评估助手。只输出 JSON，不要输出解释性文字。"
-    "score 为 0-100 的整数；matched_skills / missing_skills 为技能名数组；"
-    "reasons 为 3 条以内的字符串数组；suggestions 为 3 条可执行的改进建议。"
+    "你是招聘匹配评估助手。只输出一个合法 JSON 对象，不要输出 Markdown、代码块或解释性文字。"
+    "score 必须是 0-100 的整数；matched_skills 只能从 JD 已抽取技能中选择；"
+    "missing_skills 必须是 JD 已抽取技能中未被简历证明的部分；"
+    "两个技能字段都必须是非空字符串数组且不能重叠。"
+    "reasons 输出 2-3 条有证据的判断；suggestions 输出 2-3 条具体、可执行的改进建议。"
+    "不要编造简历没有提供的经历，不要输出 JSON 之外的字段。"
 )
 
 USER_TMPL = """【岗位描述】

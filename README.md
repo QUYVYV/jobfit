@@ -48,11 +48,19 @@ streamlit run app.py
 
 # 想用大模型增强：复制 .env.example 为 .env 并填入 Key
 # Windows PowerShell:
-$env:LLM_API_KEY="sk-xxx"
-$env:LLM_BASE_URL="https://api.deepseek.com/v1"
-$env:LLM_MODEL="deepseek-chat"
+copy .env.example .env
+# 在 .env 中填写真实 LLM_API_KEY，不要提交该文件
 streamlit run app.py
 ```
+
+项目会在启动时自动加载根目录的 `.env`。大模型调用会强制要求 JSON 结构、
+校验分数与字段类型，并在失败时回退到规则模式。连续调用测试：
+
+```bash
+python scripts/test_llm.py
+```
+
+该脚本会执行 5 次真实 API 请求，请先确认账户余额和费用预期。
 
 ## 评测
 
@@ -78,6 +86,7 @@ python eval/evaluate.py --labels eval/labels.csv
 ```
 
 > `labels.csv` 可能包含个人简历信息，已在 `.gitignore` 中排除；如需公开，请先脱敏。
+> `.env` 同样已被 Git 排除，API Key 不应写入代码、截图或公开笔记。
 
 ## 目录结构
 
