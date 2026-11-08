@@ -1,4 +1,4 @@
-id,jd,resume,human_label
-1,示例JD文本1,示例简历文本1,high
-2,示例JD文本2,示例简历文本2,mid
-3,"含逗号的JD需要加引号","含逗号的简历需要加引号",low
+id,scenario,jd,resume,human_label,rationale
+1,ai_high,"示例：AI 应用开发 JD","示例：有直接相关项目证据的简历",high,"技能和项目证据与岗位核心要求直接匹配"
+2,data_mid,"示例：数据分析 JD","示例：有部分可迁移经验的简历",mid,"具备部分技能，但关键要求证据不足"
+3,qa_low,"示例：测试开发 JD","示例：岗位方向明显不匹配的简历",low,"缺少岗位核心技能和项目证据"

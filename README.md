@@ -14,7 +14,7 @@
 - **匹配打分**：技能覆盖率与文本相似度加权计算，权重集中在 `core/scorer.py` 配置，可解释、可复现
 - **大模型增强**：接入任意 OpenAI 兼容接口（DeepSeek / 通义 / Kimi / OpenAI），输出结构化 JSON
 - **可视化**：Streamlit 页面 + 雷达图 + 缺口技能列表
-- **可评测**：30 组人工标注样本，输出三分类准确率与混淆矩阵
+- **可评测**：公开 30 组合成标注基准，支持规则/大模型对比、混淆矩阵和分类指标
 
 ## 架构
 
@@ -64,26 +64,77 @@ python scripts/test_llm.py
 
 ## 评测
 
-1. 复制 `eval/labels_template.csv` 为 `eval/labels.csv`
-2. 准备 30 组 `(JD, 简历, 人工标签 high/mid/low)`，其中 high/mid/low 各 10 组
-3. 运行：
+仓库包含 `eval/benchmark.csv`：30 组脱敏合成样本，`high / mid / low`
+各 10 组；领域分布为 AI 应用 11 组、数据分析 10 组、测试开发 9 组，
+可用于复现 README 中的指标。
+
+规则模式不产生 API 费用：
 
 ```bash
-python eval/evaluate.py --labels eval/labels.csv
+python eval/evaluate.py --labels eval/benchmark.csv --mode rule
 ```
 
-输出示例：
+大模型模式会执行 30 次 API 请求：
+
+```bash
+python eval/evaluate.py --labels eval/benchmark.csv --mode llm
+```
+
+也可以在同一次运行中比较两种模式：
+
+```bash
+python eval/evaluate.py --labels eval/benchmark.csv --mode compare
+```
+
+### 实际结果（2026-11-08）
+
+| 模式 | 准确率 | Macro F1 |
+|---|---:|---:|
+| 规则模式 | 76.67%（23/30） | 0.7634 |
+| DeepSeek `deepseek-chat` | 86.67%（26/30） | 0.8653 |
+
+| 模式 | 类别 | Precision | Recall | F1 |
+|---|---|---:|---:|---:|
+| 规则 | high | 0.6667 | 1.0000 | 0.8000 |
+| 规则 | mid | 0.7500 | 0.6000 | 0.6667 |
+| 规则 | low | 1.0000 | 0.7000 | 0.8235 |
+| 大模型 | high | 1.0000 | 1.0000 | 1.0000 |
+| 大模型 | mid | 0.8750 | 0.7000 | 0.7778 |
+| 大模型 | low | 0.7500 | 0.9000 | 0.8182 |
+
+规则模式混淆矩阵：
 
 ```
-样本数：30
-三分类准确率：76.67%
-
 混淆矩阵（行=人工标签，列=模型预测）：
            high     mid     low
- high         8       2       0
-  mid         2       6       2
-  low         0       2       8
+  high        10       0       0
+   mid         4       6       0
+   low         1       2       7
 ```
+
+大模型模式混淆矩阵：
+
+```
+混淆矩阵（行=人工标签，列=模型预测）：
+           high     mid     low
+  high        10       0       0
+   mid         0       7       3
+   low         0       1       9
+```
+
+规则模式倾向把部分 `mid` 判成 `high`，大模型减少了这类高估，
+但仍会把部分 `mid` 判成 `low`。本次大模型调用没有发生失败或规则回退。
+
+大模型结果来自同一模型的一次完整运行，可能随模型版本和采样变化；
+规则结果可完全离线复现。
+
+### 个人评测集
+
+如需评测自己的样本：
+
+1. 复制 `eval/labels_template.csv` 为 `eval/labels.csv`。
+2. 填入 JD、脱敏简历和 `high/mid/low` 标签。
+3. 运行 `python eval/evaluate.py --labels eval/labels.csv`。
 
 > `labels.csv` 可能包含个人简历信息，已在 `.gitignore` 中排除；如需公开，请先脱敏。
 > `.env` 同样已被 Git 排除，API Key 不应写入代码、截图或公开笔记。
@@ -103,7 +154,8 @@ jobfit/
 │   └── jds.jsonl           # 岗位库（可自行扩充）
 ├── eval/
 │   ├── evaluate.py         # 评测脚本
-│   └── labels_template.csv # 标注模板
+│   ├── benchmark.csv       # 30 组公开合成标注基准
+│   └── labels_template.csv # 个人标注模板
 ├── requirements.txt
 └── .env.example
 ```
