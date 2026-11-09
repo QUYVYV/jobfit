@@ -53,8 +53,8 @@ python scripts/test_llm.py
 
 ## 演示
 
-三分钟演示的分镜、讲稿和录制检查清单见
-[docs/demo-script.md](docs/demo-script.md)。
+三分钟现场演示的流程、口述要点和注意事项见
+[docs/demo-guide.md](docs/demo-guide.md)。
 
 ## 评测
 
@@ -152,7 +152,7 @@ jobfit/
 │   └── labels_template.csv # 个人标注模板
 ├── docs/
 │   ├── architecture.svg    # 系统架构图
-│   ├── demo-script.md      # 三分钟演示脚本
+│   ├── demo-guide.md       # 三分钟现场演示指南
 │   └── screenshot.png      # 完整界面截图
 ├── requirements.txt
 └── .env.example
