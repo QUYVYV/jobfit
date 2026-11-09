@@ -167,6 +167,9 @@ jobfit/
 
 ## Roadmap
 
+后续增强计划通过
+[Issue #1](https://github.com/QUYVYV/jobfit/issues/1) 跟踪。
+
 已完成：
 
 - [x] 技能标准化抽取与 121 项中英文技能词典
