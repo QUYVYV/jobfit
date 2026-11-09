@@ -18,39 +18,28 @@
 
 ## 架构
 
-```
-┌────────────┐     ┌──────────────┐     ┌───────────────┐
-│  JD 文本    │────▶│  技能抽取     │────▶│  规则打分       │
-└────────────┘     │  (skills.py)  │     │  (scorer.py)   │
-┌────────────┐     └──────────────┘     └───────┬───────┘
-│  简历文本   │──────────────────────────────────┘
-└────────────┘             │
-                           ▼
-                  ┌────────────────┐     ┌──────────────┐
-                  │  相似 JD 检索   │────▶│  LLM 结构化输出│
-                  │ (retrieval.py) │     │   (llm.py)    │
-                  └────────────────┘     └──────┬───────┘
-                                                ▼
-                                      ┌──────────────────┐
-                                      │ Streamlit 可视化  │
-                                      └──────────────────┘
-```
+![JobFit 架构图](docs/architecture.svg)
+
+输入 JD 与简历后，系统先完成技能标准化和相似岗位检索。规则模式直接生成
+可解释的覆盖率与相似度分数；启用大模型时，DeepSeek 结合检索上下文输出
+结构化判断。所有模型结果都会经过字段与类型校验，失败时自动回退规则模式。
 
 ## 快速开始
 
-```bash
-git clone https://github.com/<你的用户名>/jobfit.git
+```powershell
+git clone https://github.com/QUYVYV/jobfit.git
 cd jobfit
-pip install -r requirements.txt
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
 
 # 不配置 API Key 也能跑（规则模式）
-streamlit run app.py
+python -m streamlit run app.py
 
 # 想用大模型增强：复制 .env.example 为 .env 并填入 Key
-# Windows PowerShell:
-copy .env.example .env
+Copy-Item .env.example .env
 # 在 .env 中填写真实 LLM_API_KEY，不要提交该文件
-streamlit run app.py
+python -m streamlit run app.py
 ```
 
 项目会在启动时自动加载根目录的 `.env`。大模型调用会强制要求 JSON 结构、
@@ -61,6 +50,11 @@ python scripts/test_llm.py
 ```
 
 该脚本会执行 5 次真实 API 请求，请先确认账户余额和费用预期。
+
+## 演示
+
+三分钟演示的分镜、讲稿和录制检查清单见
+[docs/demo-script.md](docs/demo-script.md)。
 
 ## 评测
 
@@ -156,6 +150,10 @@ jobfit/
 │   ├── evaluate.py         # 评测脚本
 │   ├── benchmark.csv       # 30 组公开合成标注基准
 │   └── labels_template.csv # 个人标注模板
+├── docs/
+│   ├── architecture.svg    # 系统架构图
+│   ├── demo-script.md      # 三分钟演示脚本
+│   └── screenshot.png      # 完整界面截图
 ├── requirements.txt
 └── .env.example
 ```
@@ -169,10 +167,29 @@ jobfit/
 
 ## Roadmap
 
+已完成：
+
+- [x] 技能标准化抽取与 121 项中英文技能词典
+- [x] 25 条岗位语料与相似岗位检索
+- [x] 规则评分、DeepSeek 语义增强和失败回退
+- [x] 模型输出 JSON 结构与字段校验
+- [x] 30 组公开评测基准与双模式指标
+- [x] Streamlit 页面、示例填充和完整界面截图
+
+下一步：
+
 - [ ] 支持 PDF 简历上传与自动解析
+- [ ] 接入向量 Embedding 检索，对比 TF-IDF 召回差异
 - [ ] 扩充岗位库到 200 条，并按岗位类型分桶评测
-- [ ] 接入向量嵌入检索，对比 TF-IDF 的召回差异
 - [ ] 增加「简历改写建议」的一键生成
+- [ ] 引入更多真实脱敏样本，验证合成基准之外的泛化效果
+
+## 已知局限
+
+- 当前检索是字符级 TF-IDF，不是真正的语义向量检索。
+- 30 组评测样本为合成数据，不能完全代表真实招聘分布。
+- DeepSeek 结果可能随模型版本和采样变化，README 指标注明了一次运行日期。
+- 简历目前以纯文本粘贴为主，尚无 PDF 解析和数据持久化。
 
 ## 说明
 

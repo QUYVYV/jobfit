@@ -1,0 +1,146 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="960" viewBox="0 0 1600 960" role="img" aria-labelledby="title desc">
+  <title id="title">JobFit 系统架构图</title>
+  <desc id="desc">从 JD 和简历输入，经过技能抽取、规则打分、相似岗位检索和 DeepSeek 语义分析，最终输出 Streamlit 可视化结果，并使用 30 条基准进行评测。</desc>
+  <defs>
+    <linearGradient id="header" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#102f33"/>
+      <stop offset="0.62" stop-color="#124f50"/>
+      <stop offset="1" stop-color="#0f766e"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#0f766e"/>
+      <stop offset="1" stop-color="#14b8a6"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="9" stdDeviation="12" flood-color="#173b3f" flood-opacity="0.10"/>
+    </filter>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#6b8588"/>
+    </marker>
+    <style>
+      .title { font: 800 38px "Microsoft YaHei", "Noto Sans CJK SC", Arial, sans-serif; fill: #ffffff; }
+      .subtitle { font: 400 17px "Microsoft YaHei", "Noto Sans CJK SC", Arial, sans-serif; fill: #c8dddc; }
+      .kicker { font: 700 13px "Microsoft YaHei", "Noto Sans CJK SC", Arial, sans-serif; fill: #83e6d7; letter-spacing: 2px; }
+      .lane { font: 700 13px "Microsoft YaHei", "Noto Sans CJK SC", Arial, sans-serif; fill: #0f766e; letter-spacing: 1.5px; }
+      .card-title { font: 700 20px "Microsoft YaHei", "Noto Sans CJK SC", Arial, sans-serif; fill: #17383c; }
+      .card-copy { font: 400 14px "Microsoft YaHei", "Noto Sans CJK SC", Arial, sans-serif; fill: #62777b; }
+      .tag { font: 600 12px "Microsoft YaHei", "Noto Sans CJK SC", Arial, sans-serif; fill: #0f766e; }
+      .metric { font: 800 22px "Microsoft YaHei", "Noto Sans CJK SC", Arial, sans-serif; fill: #17383c; }
+      .metric-label { font: 500 12px "Microsoft YaHei", "Noto Sans CJK SC", Arial, sans-serif; fill: #6b7f83; }
+      .arrow-label { font: 500 12px "Microsoft YaHei", "Noto Sans CJK SC", Arial, sans-serif; fill: #708589; }
+      .footer { font: 400 13px "Microsoft YaHei", "Noto Sans CJK SC", Arial, sans-serif; fill: #6b7f83; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="960" fill="#f3f7f8"/>
+  <rect x="48" y="38" width="1504" height="160" rx="24" fill="url(#header)"/>
+  <circle cx="1455" cy="80" r="130" fill="none" stroke="#ffffff" stroke-opacity="0.08" stroke-width="1"/>
+  <circle cx="1455" cy="80" r="90" fill="none" stroke="#ffffff" stroke-opacity="0.06" stroke-width="1"/>
+  <text x="82" y="82" class="kicker">JOBFIT · SYSTEM ARCHITECTURE</text>
+  <text x="82" y="132" class="title">从岗位文本到可解释匹配结论</text>
+  <text x="82" y="166" class="subtitle">规则抽取提供稳定基线，大模型补充语义理解，离线评测量化实际效果。</text>
+
+  <text x="72" y="236" class="lane">01 · INPUT</text>
+  <text x="473" y="236" class="lane">02 · EXTRACT &amp; RETRIEVE</text>
+  <text x="874" y="236" class="lane">03 · SCORE &amp; REASON</text>
+  <text x="1275" y="236" class="lane">04 · VALIDATE &amp; PRESENT</text>
+
+  <g filter="url(#shadow)">
+    <rect x="72" y="260" width="340" height="125" rx="16" fill="#ffffff" stroke="#dbe7e8"/>
+    <rect x="72" y="260" width="8" height="125" rx="4" fill="#0f766e"/>
+    <text x="102" y="300" class="card-title">岗位描述（JD）</text>
+    <text x="102" y="331" class="card-copy">职责、硬性要求、优先技能</text>
+    <rect x="102" y="347" width="72" height="24" rx="12" fill="#e7f6f2"/>
+    <text x="120" y="364" class="tag">岗位输入</text>
+
+    <rect x="72" y="408" width="340" height="125" rx="16" fill="#ffffff" stroke="#dbe7e8"/>
+    <rect x="72" y="408" width="8" height="125" rx="4" fill="#14b8a6"/>
+    <text x="102" y="448" class="card-title">候选人简历</text>
+    <text x="102" y="479" class="card-copy">项目、技能、教育与相关经历</text>
+    <rect x="102" y="495" width="72" height="24" rx="12" fill="#e7f6f2"/>
+    <text x="120" y="512" class="tag">简历输入</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="473" y="260" width="340" height="125" rx="16" fill="#ffffff" stroke="#dbe7e8"/>
+    <text x="503" y="300" class="card-title">技能标准化抽取</text>
+    <text x="503" y="331" class="card-copy">中英文别名 → 统一技能名称</text>
+    <text x="503" y="356" class="metric">121</text>
+    <text x="551" y="355" class="metric-label">项技能 / 331 个别名</text>
+
+    <rect x="473" y="408" width="340" height="125" rx="16" fill="#ffffff" stroke="#dbe7e8"/>
+    <text x="503" y="448" class="card-title">相似岗位检索</text>
+    <text x="503" y="479" class="card-copy">字符级 TF-IDF · cosine similarity</text>
+    <text x="503" y="504" class="metric">25</text>
+    <text x="551" y="503" class="metric-label">条岗位语料</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="874" y="260" width="340" height="125" rx="16" fill="#ffffff" stroke="#dbe7e8"/>
+    <text x="904" y="300" class="card-title">规则评分</text>
+    <text x="904" y="331" class="card-copy">技能覆盖 + 文本相似 + 缺口识别</text>
+    <text x="904" y="356" class="metric">65%</text>
+    <text x="952" y="355" class="metric-label">覆盖 · 35% 相似</text>
+
+    <rect x="874" y="408" width="340" height="125" rx="16" fill="#ffffff" stroke="#dbe7e8"/>
+    <text x="904" y="448" class="card-title">DeepSeek 语义分析</text>
+    <text x="904" y="479" class="card-copy">RAG 上下文 + 结构化 JSON 输出</text>
+    <rect x="904" y="495" width="118" height="24" rx="12" fill="#e7f6f2"/>
+    <text x="925" y="512" class="tag">可自动回退</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="1275" y="260" width="253" height="125" rx="16" fill="#ffffff" stroke="#dbe7e8"/>
+    <text x="1305" y="300" class="card-title">结果校验</text>
+    <text x="1305" y="331" class="card-copy">字段 · 类型 · 分数 · 冲突</text>
+    <text x="1305" y="356" class="metric">0–100</text>
+    <text x="1386" y="355" class="metric-label">合法分数</text>
+
+    <rect x="1275" y="408" width="253" height="125" rx="16" fill="#ffffff" stroke="#dbe7e8"/>
+    <text x="1305" y="448" class="card-title">Streamlit 展示</text>
+    <text x="1305" y="479" class="card-copy">匹配分、缺口、理由和建议</text>
+    <rect x="1305" y="495" width="96" height="24" rx="12" fill="#e7f6f2"/>
+    <text x="1324" y="512" class="tag">可视化</text>
+  </g>
+
+  <path d="M 412 322 C 438 322 447 322 473 322" fill="none" stroke="#6b8588" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M 412 470 C 438 470 447 470 473 470" fill="none" stroke="#6b8588" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M 643 385 L 643 408" fill="none" stroke="#6b8588" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M 813 322 L 874 322" fill="none" stroke="#6b8588" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M 813 470 C 842 470 845 322 874 322" fill="none" stroke="#6b8588" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M 813 470 L 874 470" fill="none" stroke="#6b8588" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M 1044 385 L 1044 408" fill="none" stroke="#6b8588" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M 1214 322 L 1275 322" fill="none" stroke="#6b8588" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M 1214 470 C 1245 470 1244 385 1275 385" fill="none" stroke="#6b8588" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M 1401 385 L 1401 408" fill="none" stroke="#6b8588" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="824" y="307" class="arrow-label">抽取技能</text>
+  <text x="691" y="403" class="arrow-label">岗位文本</text>
+  <text x="1221" y="307" class="arrow-label">规则分</text>
+  <text x="1221" y="455" class="arrow-label">语义结果</text>
+
+  <rect x="72" y="610" width="1456" height="235" rx="20" fill="#ffffff" stroke="#dbe7e8" filter="url(#shadow)"/>
+  <rect x="72" y="610" width="8" height="235" rx="4" fill="url(#accent)"/>
+  <text x="106" y="653" class="lane">OFFLINE EVALUATION</text>
+  <text x="106" y="691" class="card-title">用同一批 30 组样本比较规则与大模型</text>
+  <text x="106" y="721" class="card-copy">公开合成基准 · 每类 10 条 · 结构校验 · 失败回退单独计数</text>
+
+  <rect x="106" y="753" width="280" height="61" rx="12" fill="#f4faf9"/>
+  <text x="128" y="778" class="metric">76.67%</text>
+  <text x="128" y="799" class="metric-label">规则模式准确率 · Macro F1 0.7634</text>
+
+  <rect x="410" y="753" width="280" height="61" rx="12" fill="#eaf8f3"/>
+  <text x="432" y="778" class="metric">86.67%</text>
+  <text x="432" y="799" class="metric-label">DeepSeek 准确率 · Macro F1 0.8653</text>
+
+  <rect x="714" y="753" width="280" height="61" rx="12" fill="#fff7ef"/>
+  <text x="736" y="778" class="metric">30</text>
+  <text x="772" y="778" class="metric-label">组样本</text>
+  <text x="736" y="799" class="metric-label">high / mid / low 各 10 组</text>
+
+  <rect x="1018" y="753" width="480" height="61" rx="12" fill="#f5f8f9"/>
+  <text x="1040" y="778" class="card-title" font-size="16">已知局限</text>
+  <text x="1040" y="799" class="metric-label">字符级 TF-IDF · 合成评测集 · 大模型结果可能随版本变化</text>
+
+  <text x="72" y="892" class="footer">关键设计：规则模式始终可离线运行；DeepSeek 调用失败时自动回退，页面不会因外部服务异常而中断。</text>
+  <text x="1528" y="892" class="footer" text-anchor="end">JobFit · 2026</text>
+</svg>
